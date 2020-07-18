@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>AlarmAQI</title>
+</head>
+
+<body style="margin: 0 auto;">
+    <link rel="stylesheet" type="text/css" href="./air/view/citym/style/bundle.css?_=20170416.100005">
+    <script src="./air/view/citym/script.min.js?_=1492304405" type="text/javascript"></script>
+    <script>
+        function getAqiModel() {
+            if (window.aqiModel)
+                return aqiModel;
+
+        }
+        function getLang() { return "en"; } function getCity() { return "VN:Hanoi/US Embassy"; }
+        window.aqiModel = {
+            "aqi": 9999990
+        }
+    </script>
+    <div class="waPage " id="waPageMain" style="-ms-touch-action: none">
+        <div class="waPageHeader" id="waHdrMain">
+            <h1>@stationName@ Air Quality.</h1>
+        </div>
+        <div class="waPageContent">
+            <div id="header" style="">
+                <table id="aqi-header" style="text-align: center; width: 100%;" cellpadding="0" cellspacing="0">
+                    <script>$G(function (model) { $O('aqi-header', null, { backgroundColor: aqiColor(model.aqi, "b"), color: aqiColor(model.aqi, "f"), textShadow: "1px 0px 1px " + aqiColor(model.aqi, "s") }); });</script>
+                    <tbody>
+                        <tr style="height:60px;">
+                            <td align="center" style="width:33%;font-weight: lighter;">
+                                <div style="font-size: 42px;" id="xatzcaqv">194</div>
+                                <script>$G(function (model) { $O('xatzcaqv', model.aqi, { color: colorMixer(aqiColor(model.aqi, "b"), aqiColor(model.aqi, "f"), .88) }); });</script>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td align="left" style="width:100%;">
+                                <div class="headline item" id="aqi-lvl" style="font-size: 42px; font-weight: bold;">Unhealthy</div>
+                                <script>$G(function (model) { var lvl = getAqiLevel(model.aqi); var large = !isMobileUA && (getWindowWidth() > 800); $O('aqi-lvl', (large && lvl.n) ? lvl.n : lvl.m, { fontSize: large ? "42px" : lvl.s, fontWeight: "bold" }); });</script>
+                            </td>
+                        </tr>
+                        <tr><td colspan="3" id="aqi-subheader" style="color: white; text-shadow: black 1px 0px 1px; background-color: rgb(219, 77, 112);"><div style="font-size:15px;margin:8px 0 8px 0;text-align:center;"><span id="aqi-uptime">Updated on @DATE_TIME@</span><span id="aqi-dominent-info" style="font-size:12px;display:none"> - Primary pollutant: <b><span id="aqi-dominent-pol"></span></b></span></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id='map' style='height:380px;' />
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvgVagGPB8qlwx_hNa5YhfTtfMzyKrfO0"></script>
+
+        <script>
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: new google.maps.LatLng("@latitude@", "@longitude@"),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                zoom: 11
+            });
+
+            var t = new Date().getTime();
+            var waqiMapOverlay = new google.maps.ImageMapType({
+                getTileUrl: function (coord, zoom) {
+                    return 'https://tiles.waqi.info/tiles/usepa-aqi/' + zoom + "/" + coord.x + "/" + coord.y + ".png?token=_TOKEN_ID_";
+                },
+                name: "Air  Quality",
+            });
+
+            map.overlayMapTypes.insertAt(0, waqiMapOverlay);
+        </script>
+
+
+    </div>
+    <style type="text/css">
+        #legend-full table.infoaqitable {
+            line-height: 1.5;
+            background-color: white;
+            max-width: 1000px;
+            width: 95%;
+            margin: 0px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+            #legend-full table.infoaqitable td {
+                padding: 5px;
+                font-size: 15px;
+                text-shadow: none;
+            }
+
+        #legend-full .aqiwtxt {
+            text-shadow: 0px 0px 1px #000000 !important;
+            color: #ffffff;
+        }
+
+        #legend-full .aqibtxt {
+            text-shadow: 1px 1px 1px #000000 !important;
+            color: #ffffff;
+        }
+
+        @media only screen and (max-width: 800px) {
+            #legend-full table.infoaqitable {
+                width: 98%;
+            }
+        }
+
+        @media only screen and (max-width: 420px) {
+            #legend-full table.infoaqitable td:first-child {
+                font-size: 12px;
+            }
+        }
+
+        @media only screen and (max-width: 420px) {
+            #legend-full table.infoaqitable td:first-child {
+                font-size: 10px;
+            }
+
+            #legend-full table.infoaqitable td:nth-child(2) {
+                font-size: 11px;
+            }
+
+            #legend-full table.infoaqitable.cautionary td:nth-child(3) {
+                font-size: 70%;
+            }
+
+            #legend-full table.infoaqitable.cautionary td:nth-child(4) {
+                font-size: 70%;
+            }
+
+            #legend-full table.infoaqitable.cautionary td {
+                padding: 1px;
+            }
+        }
+    </style>
+    <div id="legend-full"><table class="infoaqitable cautionary"><thead><tr><td>AQI</td><td>Air Pollution Level</td><td>Health Implications</td><td>Cautionary Statement (for PM2.5)</td></tr></thead><tbody><tr style="background-color:#009966;"><td class="aqiwtxt" nowrap="true">0 - 50</td><td class="aqiwtxt">Good</td><td class="aqiwtxt">Air quality is considered satisfactory, and air pollution poses little or no risk</td><td class="aqiwtxt">None</td></tr><tr style="background-color:#ffde33" class="aqibtxt"><td class="aqibtxt" nowrap="true">51 -100</td><td class="aqibtxt">Moderate</td><td class="aqibtxt">Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.</td><td class="aqibtxt">Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.</td></tr><tr style="background-color:#ff9933;"><td class="aqibtxt" nowrap="true">101-150</td><td class="aqibtxt">Unhealthy for Sensitive Groups</td><td class="aqibtxt">Members of sensitive groups may experience health effects. The general public is not likely to be affected.</td><td class="aqibtxt">Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.</td></tr><tr style="background-color:#cc0033;"><td class="aqiwtxt" nowrap="true">151-200</td><td class="aqiwtxt">Unhealthy</td><td class="aqiwtxt">Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects</td><td class="aqiwtxt">Active children and adults, and people with respiratory disease, such as asthma, should avoid prolonged outdoor exertion; everyone else, especially children, should limit prolonged outdoor exertion</td></tr><tr style="background-color:#660099;"><td class="aqiwtxt" nowrap="true">201-300</td><td class="aqiwtxt">Very Unhealthy</td><td class="aqiwtxt">Health warnings of emergency conditions. The entire population is more likely to be affected.</td><td class="aqiwtxt">Active children and adults, and people with respiratory disease, such as asthma, should avoid all outdoor exertion; everyone else, especially children, should limit outdoor exertion.</td></tr><tr style="background-color:#7e0023;"><td class="aqiwtxt" nowrap="true">300+</td><td class="aqiwtxt">Hazardous</td><td class="aqiwtxt">Health alert: everyone may experience more serious health effects</td><td class="aqiwtxt">Everyone should avoid all outdoor exertion</td></tr></tbody></table></div>
+
+</body>
+
+</html>

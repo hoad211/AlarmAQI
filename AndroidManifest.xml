@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="AlarmAQI.Android" platformBuildVersionCode="26" platformBuildVersionName="8.0.0">
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="AlarmAQI.android.permission.C2D_MESSAGE"/>
+    <application android:allowBackup="true" android:icon="@drawable/aqi_512_512" android:label="AlarmAQI" android:name="android.app.Application">
+        <activity android:configChanges="orientation|screenSize" android:icon="@drawable/icon" android:label="AlarmActivity" android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.AlarmActivity" android:theme="@style/MainTheme"/>
+        <activity android:configChanges="orientation|screenSize" android:icon="@drawable/icon" android:label="AQIActivity" android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.AQIActivity" android:theme="@style/MainTheme"/>
+        <receiver android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.AlarmReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="AlarmAQI.android"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="AlarmAQI.android"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gcm.intent.RETRY"/>
+                <category android:name="AlarmAQI.android"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.ReminderReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="AlarmAQI.android"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="AlarmAQI.android"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gcm.intent.RETRY"/>
+                <category android:name="AlarmAQI.android"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.SimpleStartedService"/>
+        <activity android:configChanges="orientation|screenSize" android:icon="@drawable/icon" android:label="AlarmAQI" android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.MainActivity" android:theme="@style/MainTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:label="ShakeService" android:name="md54fbc1f82a1c57cbaada1c5d4b0c7ef1f.ShakeService"/>
+        <provider android:authorities="AlarmAQI.Android.mono.MonoRuntimeProvider.__mono_init__" android:exported="false" android:initOrder="2147483647" android:name="mono.MonoRuntimeProvider"/>
+    </application>
+    <activity android:excludeFromRecents="true" android:name=".MainActivity"/>
+</manifest>
